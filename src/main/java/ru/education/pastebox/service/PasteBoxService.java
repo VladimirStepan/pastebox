@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.education.pastebox.entity.Paste;
 import ru.education.pastebox.repositories.PasteBoxRepository;
-
+import ru.education.pastebox.util.GenerateRandomHash;
 import java.util.List;
 
 @Service
@@ -22,5 +22,16 @@ public class PasteBoxService {
 
     public List<Paste> getAllPasteBoxesPublic(String status) {
         return pasteBoxRepository.findPasteByStatus(status);
+    }
+
+    @Transactional
+    public void registration(Paste paste) {
+        enrichPaste(paste);
+
+
+    }
+
+    private void enrichPaste(Paste paste){
+        paste.setHash(GenerateRandomHash.generateRandomHash());
     }
 }
