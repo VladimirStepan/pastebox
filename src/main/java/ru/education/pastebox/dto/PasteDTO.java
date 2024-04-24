@@ -17,7 +17,7 @@ public class PasteDTO {
     private String status;
 
     @NotNull
-    private LocalDateTime lifeTime;
+    private int lifeTime;
 
     @NotEmpty(message = "Поле содержащее код, не может быть пустым!")
     @Size(min = 10, max = 256, message = "Код для отправки должен содержать не менее 10 и не более 256 символов")

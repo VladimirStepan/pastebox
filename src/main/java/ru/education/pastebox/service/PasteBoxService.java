@@ -1,11 +1,16 @@
 package ru.education.pastebox.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.education.pastebox.entity.Paste;
 import ru.education.pastebox.math.GenerateRandomHash;
 import ru.education.pastebox.repositories.PasteBoxRepository;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +27,8 @@ public class PasteBoxService {
     }
 
     public List<Paste> getAllPasteBoxesPublic(String status) {
-        return pasteBoxRepository.findPasteByStatus(status);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
+        return pasteBoxRepository.findPasteByStatus(status, pageable);
     }
 
     public Optional<Paste> getPasteByHash(String hash) {
@@ -37,5 +43,6 @@ public class PasteBoxService {
 
     private void enrichPaste(Paste paste){
         paste.setHash(GenerateRandomHash.generateRandomHash());
+        paste.setCreatedAt(LocalDateTime.now());
     }
 }

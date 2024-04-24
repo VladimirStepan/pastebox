@@ -8,10 +8,15 @@ import org.springframework.web.bind.annotation.*;
 import ru.education.pastebox.dto.PasteBoxResponse;
 import ru.education.pastebox.dto.PasteDTO;
 import ru.education.pastebox.entity.Paste;
+import ru.education.pastebox.entity.PasteRegistrationResponse;
 import ru.education.pastebox.service.PasteBoxService;
 import ru.education.pastebox.util.PasteConvertor;
 import ru.education.pastebox.util.Status;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,19 +38,23 @@ public class PasteBoxController {
 
     @GetMapping("/{hash}")
     public PasteDTO getByHash(@PathVariable String hash) {
-        if(pasteBoxService.getPasteByHash(hash).isPresent()){
-            return pasteConvertor.convertToPasteDTO(pasteBoxService.getPasteByHash(hash).get());
-        }else {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Optional<Paste> paste = pasteBoxService.getPasteByHash(hash);
+        if(paste.isPresent() && paste.get().getCreatedAt().until(localDateTime, ChronoUnit.SECONDS) < paste.get().getLifeTime()){
+            return pasteConvertor.convertToPasteDTO(paste.get());
+        }else{
             return new PasteDTO();
         }
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<HttpStatus> addPaste(@Valid @RequestBody PasteDTO pasteDTO) {
+    public PasteRegistrationResponse addPaste(@Valid @RequestBody PasteDTO pasteDTO) {
         Paste paste = pasteConvertor.convertToPaste(pasteDTO);
 
         pasteBoxService.registration(paste);
 
-        return ResponseEntity.ok(HttpStatus.OK);
+        String message = "/my-awesome-pastebin.tld/" + paste.getHash();
+        return new PasteRegistrationResponse(ResponseEntity.ok(HttpStatus.OK), message);
     }
+
 }

@@ -29,11 +29,15 @@ public class Paste {
 
     @Column(name = "life_time")
     @NotNull
-    private LocalDateTime lifeTime;
+    private int lifeTime;
 
     @Column(name = "body")
     @NotEmpty(message = "Поле содержащее код, не может быть пустым!")
     @Size(min = 10, max = 256, message = "Код для отправки должен содержать не менее 10 и не более 256 символов")
     private String body;
+
+    @Column(name = "created_at")
+    @NotNull
+    private LocalDateTime createdAt;
 
 }
