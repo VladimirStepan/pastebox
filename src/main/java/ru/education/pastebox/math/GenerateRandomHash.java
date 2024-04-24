@@ -1,4 +1,4 @@
-package ru.education.pastebox.util;
+package ru.education.pastebox.math;
 
 import java.util.Random;
 

@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface PasteBoxRepository extends JpaRepository<Paste, Integer> {
         List<Paste> findPasteByStatus(String pasteBoxStatus);
+        Optional<Paste> findPasteByHash(String pasteBoxHash);
 }

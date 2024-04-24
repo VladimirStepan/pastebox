@@ -1,7 +1,6 @@
 package ru.education.pastebox.controllers;
 
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +12,6 @@ import ru.education.pastebox.service.PasteBoxService;
 import ru.education.pastebox.util.PasteConvertor;
 import ru.education.pastebox.util.Status;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,22 +27,25 @@ public class PasteBoxController {
     }
 
     @GetMapping()
-    public PasteBoxResponse getPublicPasteList(){
+    public PasteBoxResponse getPublicPasteList() {
         return new PasteBoxResponse(pasteBoxService.getAllPasteBoxesPublic(Status.PUBLIC.getStatus()).stream().map(pasteConvertor::convertToPasteDTO).collect(Collectors.toList()));
     }
 
     @GetMapping("/{hash}")
-    public String getByHash(@PathVariable String hash){
-        return hash;
+    public PasteDTO getByHash(@PathVariable String hash) {
+        if(pasteBoxService.getPasteByHash(hash).isPresent()){
+            return pasteConvertor.convertToPasteDTO(pasteBoxService.getPasteByHash(hash).get());
+        }else {
+            return new PasteDTO();
+        }
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<HttpStatus> addPaste(@Valid @RequestBody PasteDTO pasteDTO){
+    public ResponseEntity<HttpStatus> addPaste(@Valid @RequestBody PasteDTO pasteDTO) {
         Paste paste = pasteConvertor.convertToPaste(pasteDTO);
 
         pasteBoxService.registration(paste);
 
-    return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
-
 }

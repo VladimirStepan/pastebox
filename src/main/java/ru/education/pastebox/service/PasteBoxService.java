@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.education.pastebox.entity.Paste;
+import ru.education.pastebox.math.GenerateRandomHash;
 import ru.education.pastebox.repositories.PasteBoxRepository;
-import ru.education.pastebox.util.GenerateRandomHash;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,11 +25,14 @@ public class PasteBoxService {
         return pasteBoxRepository.findPasteByStatus(status);
     }
 
+    public Optional<Paste> getPasteByHash(String hash) {
+        return pasteBoxRepository.findPasteByHash(hash);
+    }
+
     @Transactional
     public void registration(Paste paste) {
         enrichPaste(paste);
-
-
+        pasteBoxRepository.save(paste);
     }
 
     private void enrichPaste(Paste paste){
