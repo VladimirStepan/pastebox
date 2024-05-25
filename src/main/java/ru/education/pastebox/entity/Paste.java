@@ -40,4 +40,6 @@ public class Paste {
     @NotNull
     private LocalDateTime createdAt;
 
+    public Paste() {
+    }
 }
