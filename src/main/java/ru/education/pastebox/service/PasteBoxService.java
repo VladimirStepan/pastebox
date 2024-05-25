@@ -41,7 +41,7 @@ public class PasteBoxService {
         pasteBoxRepository.save(paste);
     }
 
-    private void enrichPaste(Paste paste){
+    private void enrichPaste(Paste paste) {
         paste.setHash(GenerateRandomHash.generateRandomHash());
         paste.setCreatedAt(LocalDateTime.now());
     }

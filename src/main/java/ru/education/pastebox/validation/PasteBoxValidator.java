@@ -27,7 +27,7 @@ public class PasteBoxValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Paste paste = (Paste) target;
 
-        if(pasteBoxService.getPasteByHash(paste.getHash()).isPresent()){
+        if (pasteBoxService.getPasteByHash(paste.getHash()).isPresent()) {
             errors.rejectValue("hash", "Хэш с таким названием уже есть");
         }
 

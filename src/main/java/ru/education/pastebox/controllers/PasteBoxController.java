@@ -19,7 +19,6 @@ import ru.education.pastebox.validation.PasteBoxValidator;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,9 +47,9 @@ public class PasteBoxController {
     public ResponseEntity<PasteDTO> getByHash(@PathVariable String hash) {
         LocalDateTime localDateTime = LocalDateTime.now();
         Optional<Paste> paste = pasteBoxService.getPasteByHash(hash);
-        if(paste.isPresent() && paste.get().getCreatedAt().until(localDateTime, ChronoUnit.SECONDS) < paste.get().getLifeTime()){
+        if (paste.isPresent() && paste.get().getCreatedAt().until(localDateTime, ChronoUnit.SECONDS) < paste.get().getLifeTime()) {
             return ResponseEntity.ok(pasteConvertor.convertToPasteDTO(paste.get()));
-        }else{
+        } else {
             return ResponseEntity.notFound().build();
         }
     }
@@ -61,7 +60,7 @@ public class PasteBoxController {
 
         pasteBoxValidator.validate(paste, bindingResult);
 
-        if(bindingResult.hasErrors())
+        if (bindingResult.hasErrors())
             returnsClientErrorMessage(bindingResult);
 
         pasteBoxService.registration(paste);
@@ -72,9 +71,9 @@ public class PasteBoxController {
     }
 
     @ExceptionHandler
-    private ResponseEntity<PasteBoxErrorResponse> handleException(PasteBoxException pasteBoxException){
+    private ResponseEntity<PasteBoxErrorResponse> handleException(PasteBoxException pasteBoxException) {
         PasteBoxErrorResponse errorResponse = new PasteBoxErrorResponse(
-          pasteBoxException.getMessage(), System.currentTimeMillis()
+                pasteBoxException.getMessage(), System.currentTimeMillis()
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
