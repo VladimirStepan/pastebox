@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.context.TestPropertySource;
 import ru.education.pastebox.entity.Paste;
 import ru.education.pastebox.repositories.PasteBoxRepository;
 import ru.education.pastebox.util.Status;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+@TestPropertySource(properties = {"JDBC_URL=jdbc:postgresql://localhost:5432/pastebox_db"})
 class PasteBoxServiceTest {
     @Autowired
     PasteBoxService pasteBoxService;

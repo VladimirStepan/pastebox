@@ -55,7 +55,7 @@ public class PasteBoxController {
     }
 
     @PostMapping("/registration")
-    public PasteRegistrationResponse addPaste(@Valid @RequestBody PasteDTO pasteDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> addPaste(@Valid @RequestBody PasteDTO pasteDTO, BindingResult bindingResult) {
         Paste paste = pasteConvertor.convertToPaste(pasteDTO);
 
         pasteBoxValidator.validate(paste, bindingResult);
@@ -66,7 +66,8 @@ public class PasteBoxController {
         pasteBoxService.registration(paste);
 
         String message = "/my-awesome-pastebin.tld/" + paste.getHash();
-        return new PasteRegistrationResponse(ResponseEntity.ok(HttpStatus.OK), message);
+        PasteRegistrationResponse pasteRegistrationResponse = new PasteRegistrationResponse(pasteDTO, message);
+        return new ResponseEntity<>(pasteRegistrationResponse, HttpStatus.OK);
 
     }
 
