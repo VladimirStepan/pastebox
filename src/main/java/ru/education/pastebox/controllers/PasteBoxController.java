@@ -1,6 +1,7 @@
 package ru.education.pastebox.controllers;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,17 +27,11 @@ import static ru.education.pastebox.validation.ErrorUtil.returnsClientErrorMessa
 
 @RestController
 @RequestMapping("/my-awesome-pastebin.tld")
+@RequiredArgsConstructor
 public class PasteBoxController {
     private final PasteBoxService pasteBoxService;
     private final PasteConvertor pasteConvertor;
     private final PasteBoxValidator pasteBoxValidator;
-
-    @Autowired
-    public PasteBoxController(PasteBoxService pasteBoxService, PasteConvertor pasteConvertor, PasteBoxValidator pasteBoxValidator) {
-        this.pasteBoxService = pasteBoxService;
-        this.pasteConvertor = pasteConvertor;
-        this.pasteBoxValidator = pasteBoxValidator;
-    }
 
     @GetMapping()
     public PasteBoxResponse getPublicPasteList() {
